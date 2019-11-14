@@ -1,0 +1,3 @@
+# automatisch von Python generierte Dateien ignorieren
+__pycache__/
+__pycache__/*
