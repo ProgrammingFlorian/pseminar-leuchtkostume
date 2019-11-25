@@ -1,3 +1,5 @@
 # automatisch von Python generierte Dateien ignorieren
 __pycache__/
 __pycache__/*
+# automatisch von VIM generierte Dateien ignorieren
+*.swp
