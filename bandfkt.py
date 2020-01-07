@@ -2,10 +2,15 @@ import time
 import board
 import neopixel
 
-pixel_pin = board.D18
-num_pixels = 7
-ORDER = neopixel.GRB
-pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER)
+pixels = 0
+
+def initNeopixels(num, order):
+	global pixels
+	pixel_pin = board.D18
+	num_pixels = num
+	ORDER = order
+	pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER)
+	return pixels
 
 def pas(num): # Funktion, um einen Wert zu geben, der sicher für den Leuchtstreifen passt
 	if num < 0:
@@ -28,9 +33,21 @@ def gradient(which_pixels, start, stop, ltime):
 	steps = getSteps(start, stop, ltime)
 ##	i = 0
 	while time.time() - beginTime <= ltime:
-		print(str(i) + " " + str((pixels[0][0], pixels[0][1], pixels[0][2])))
+##		print(str(i) + " " + str((pixels[0][0], pixels[0][1], pixels[0][2])))
 		for j in which_pixels:
 			pixels[j] = (pas(pixels[j][0] + steps[0]), pas(pixels[j][1] + steps[1]), pas(pixels[j][2] + steps[2]))
 		pixels.show()
 ##		i += 1
 		time.sleep(0.01)
+
+def flackern(which_pixels):
+	global pixels
+	start_pixels = []
+	for j in which_pixels:
+		start_pixels.append(pixels[j])
+		pixels[j] = (pas(pixels[j][0] + 128), pas(pixels[j][1] + 128), pas(pixels[j][2] + 128))
+	pixels.show()
+	time.sleep(0.1)
+	for j in which_pixels:
+		pixels[j] = start_pixels[j]
+	pixels.show()
